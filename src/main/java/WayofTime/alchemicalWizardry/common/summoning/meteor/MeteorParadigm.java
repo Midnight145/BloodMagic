@@ -1,6 +1,7 @@
 package WayofTime.alchemicalWizardry.common.summoning.meteor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -17,20 +18,28 @@ import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.common.blocks.TileEntityOres;
+import org.lwjgl.Sys;
 
 public class MeteorParadigm {
 
-    public List<MeteorParadigmComponent> componentList = new ArrayList<>();
+    public List<MeteorParadigmComponent> oreList = new ArrayList<>();
+    public List<MeteorParadigmComponent> fillerList = new ArrayList<>();
     public ItemStack focusStack;
     public int radius;
     public int cost;
+    public int fillerChance; //Out of 100
 
     public static Random rand = new Random();
 
     public MeteorParadigm(ItemStack focusStack, int radius, int cost) {
+        new MeteorParadigm(focusStack, radius, cost ,0);
+    }
+
+    public MeteorParadigm(ItemStack focusStack, int radius, int cost, int fillerWeight) {
         this.focusStack = focusStack;
         this.radius = radius;
         this.cost = cost;
+        this.fillerChance = fillerWeight;
     }
 
     // modId:itemName:meta:weight
@@ -39,6 +48,11 @@ public class MeteorParadigm {
     private static final Pattern oredictPattern = Pattern.compile("OREDICT:(.*):(\\d+)");
 
     public void parseStringArray(String[] oreArray) {
+        parseStringArray(oreArray, false);
+    }
+
+    public void parseStringArray(String[] oreArray, boolean filler) {
+        List<MeteorParadigmComponent> addList = filler ? fillerList : oreList;
         for (int i = 0; i < oreArray.length; ++i) {
             String oreName = oreArray[i];
             boolean success = false;
@@ -53,7 +67,7 @@ public class MeteorParadigm {
                 ItemStack stack = GameRegistry.findItemStack(modID, itemName, 1);
                 if (stack != null && stack.getItem() instanceof ItemBlock) {
                     stack.setItemDamage(meta);
-                    componentList.add(new MeteorParadigmComponent(stack, weight));
+                    addList.add(new MeteorParadigmComponent(stack, weight));
                     success = true;
                 }
 
@@ -64,7 +78,7 @@ public class MeteorParadigm {
                 List<ItemStack> list = OreDictionary.getOres(oreDict);
                 for (ItemStack stack : list) {
                     if (stack != null && stack.getItem() instanceof ItemBlock) {
-                        componentList.add(new MeteorParadigmComponent(stack, weight));
+                        addList.add(new MeteorParadigmComponent(stack, weight));
                         success = true;
                         break;
                     }
@@ -78,7 +92,7 @@ public class MeteorParadigm {
                 List<ItemStack> list = OreDictionary.getOres(oreDict);
                 for (ItemStack stack : list) {
                     if (stack != null && stack.getItem() instanceof ItemBlock) {
-                        componentList.add(new MeteorParadigmComponent(stack, weight));
+                        addList.add(new MeteorParadigmComponent(stack, weight));
                         success = true;
                         break;
                     }
@@ -91,12 +105,20 @@ public class MeteorParadigm {
         }
     }
 
-    public int getTotalMeteorWeight() {
-        int totalMeteorWeight = 0;
-        for (MeteorParadigmComponent mpc : componentList) {
-            totalMeteorWeight += mpc.getChance();
+    public int getTotalOreWeight() {
+        int totalWeight = 0;
+        for (MeteorParadigmComponent mpc : oreList) {
+            totalWeight += mpc.getChance();
         }
-        return totalMeteorWeight;
+        return totalWeight;
+    }
+
+    public int getTotalFillerWeight() {
+        int totalWeight = 0;
+        for (MeteorParadigmComponent mpc : fillerList) {
+            totalWeight += mpc.getChance();
+        }
+        return totalWeight;
     }
 
     public void createMeteorImpact(World world, int x, int y, int z, boolean[] flags) {
@@ -130,7 +152,8 @@ public class MeteorParadigm {
 
         float totalChance = iceChance + soulChance + obsidChance;
 
-        int totalMeteorWeight = getTotalMeteorWeight();
+        int totalOreWeight = getTotalOreWeight();
+        int totalFillerWeight = getTotalFillerWeight();
 
         for (int i = -newRadius; i <= newRadius; i++) {
             for (int j = -newRadius; j <= newRadius; j++) {
@@ -143,43 +166,9 @@ public class MeteorParadigm {
                         continue;
                     }
 
-                    int randNum = world.rand.nextInt(totalMeteorWeight);
-
-                    boolean hasPlacedBlock = false;
-
-                    for (MeteorParadigmComponent mpc : componentList) {
-                        randNum -= mpc.getChance();
-
-                        if (randNum < 0) {
-                            ItemStack blockStack = mpc.getValidBlockParadigm();
-                            if (blockStack != null && blockStack.getItem() instanceof ItemBlock) {
-                                ((ItemBlock) blockStack.getItem()).placeBlockAt(
-                                        blockStack,
-                                        null,
-                                        world,
-                                        x + i,
-                                        y + j,
-                                        z + k,
-                                        0,
-                                        0,
-                                        0,
-                                        0,
-                                        blockStack.getItemDamage());
-                                if (AlchemicalWizardry.isGregTechLoaded)
-                                    setGTOresNaturalIfNeeded(world, x + i, y + j, z + k);
-                                world.markBlockForUpdate(x + i, y + j, z + k);
-                                hasPlacedBlock = true;
-                                break;
-                            }
-                            // world.setBlock(x + i, y + j, z + k,
-                            // Block.getBlockById(Item.getIdFromItem(blockStack.getItem())), blockStack.getItemDamage(),
-                            // 3);
-                            // hasPlacedBlock = true;
-                            // break;
-                        }
-                    }
-
-                    if (!hasPlacedBlock) {
+                    if (world.rand.nextInt(100) >= fillerChance) {
+                        setMeteorBlock(x + i, y + j, z + k, world, oreList, totalOreWeight);
+                    } else {
                         float randChance = rand.nextFloat() * totalChance;
 
                         if (randChance < iceChance) {
@@ -205,13 +194,47 @@ public class MeteorParadigm {
                                 if (randChance < obsidChance) {
                                     world.setBlock(x + i, y + j, z + k, Blocks.obsidian, 0, 3);
                                 } else {
-                                    randChance -= obsidChance;
-
-                                    world.setBlock(x + i, y + j, z + k, Blocks.stone, 0, 3);
+                                    if (this.fillerList != null) {
+                                        setMeteorBlock(x + i, y + j, z + k, world, fillerList, totalFillerWeight);
+                                    } else {
+                                        world.setBlock(x + i, y + j, z + k, Blocks.stone, 0, 3);
+                                    }
                                 }
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private void setMeteorBlock(int x, int y, int z, World world, List<MeteorParadigmComponent> blockList, int totalListWeight) {
+        int randNum = world.rand.nextInt(totalListWeight);
+        for (MeteorParadigmComponent mpc : blockList) {
+            System.out.println("block: " + mpc.getValidBlockParadigm());
+            System.out.println("chance: " + mpc.getChance());
+            System.out.println("randNum: " + randNum);
+            randNum -= mpc.getChance();
+
+            if (randNum < 0) {
+                ItemStack blockStack = mpc.getValidBlockParadigm();
+                if (blockStack != null && blockStack.getItem() instanceof ItemBlock) {
+                    ((ItemBlock) blockStack.getItem()).placeBlockAt(
+                            blockStack,
+                            null,
+                            world,
+                            x,
+                            y,
+                            z,
+                            0,
+                            0,
+                            0,
+                            0,
+                            blockStack.getItemDamage());
+                    if (AlchemicalWizardry.isGregTechLoaded)
+                        setGTOresNaturalIfNeeded(world, x, y, z);
+                    world.markBlockForUpdate(x, y, z);
+                    break;
                 }
             }
         }
