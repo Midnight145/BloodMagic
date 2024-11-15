@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Arrays;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -21,6 +22,8 @@ public class Meteor {
     public String focusModId;
     public String focusName;
     public int focusMeta;
+    private String[] filler;
+    private int fillerChance;
 
     public static void loadConfig() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -35,7 +38,12 @@ public class Meteor {
                             findItemStack(m.focusModId, m.focusName, m.focusMeta),
                             m.ores,
                             m.radius,
-                            m.cost);
+                            m.cost,
+                            m.filler,
+                            m.fillerChance);
+                    System.out.println("ores: " + Arrays.toString(m.ores));
+                    System.out.println("filler: " + Arrays.toString(m.filler));
+                    System.out.println("fillerChance: " + m.fillerChance);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
