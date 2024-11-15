@@ -194,7 +194,7 @@ public class MeteorParadigm {
                                 if (randChance < obsidChance) {
                                     world.setBlock(x + i, y + j, z + k, Blocks.obsidian, 0, 3);
                                 } else {
-                                    if (this.fillerList != null) {
+                                    if (!this.fillerList.isEmpty()) {
                                         setMeteorBlock(x + i, y + j, z + k, world, fillerList, totalFillerWeight);
                                     } else {
                                         world.setBlock(x + i, y + j, z + k, Blocks.stone, 0, 3);
