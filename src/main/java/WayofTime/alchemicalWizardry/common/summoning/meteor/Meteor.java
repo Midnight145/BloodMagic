@@ -41,9 +41,6 @@ public class Meteor {
                             m.cost,
                             m.filler,
                             m.fillerChance);
-                    System.out.println("ores: " + Arrays.toString(m.ores));
-                    System.out.println("filler: " + Arrays.toString(m.filler));
-                    System.out.println("fillerChance: " + m.fillerChance);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
