@@ -65,6 +65,7 @@ public class FallingTower {
             if (filler != null) {
                 paradigm.parseStringArray(filler, true);
             }
+            paradigm.fillerChance = fillerChance;
         }
 
         @Override

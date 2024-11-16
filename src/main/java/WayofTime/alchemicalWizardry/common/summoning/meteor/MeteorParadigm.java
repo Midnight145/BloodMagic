@@ -49,13 +49,13 @@ public class MeteorParadigm {
         parseStringArray(componentArray, false);
     }
 
-    public void parseStringArray(String[] componentArray, boolean filler) {
+    public void parseStringArray(String[] blockArray, boolean filler) {
         List<MeteorParadigmComponent> addList = filler ? fillerList : componentList;
-        for (int i = 0; i < componentArray.length; ++i) {
-            String componentName = componentArray[i];
+        for (int i = 0; i < blockArray.length; ++i) {
+            String blockName = blockArray[i];
             boolean success = false;
 
-            Matcher matcher = itemNamePattern.matcher(componentName);
+            Matcher matcher = itemNamePattern.matcher(blockName);
             if (matcher.matches()) {
                 String modID = matcher.group(1);
                 String itemName = matcher.group(2);
@@ -69,7 +69,7 @@ public class MeteorParadigm {
                     success = true;
                 }
 
-            } else if ((matcher = oredictPattern.matcher(componentName)).matches()) {
+            } else if ((matcher = oredictPattern.matcher(blockName)).matches()) {
                 String oreDict = matcher.group(1);
                 int weight = Integer.parseInt(matcher.group(2));
 
@@ -84,8 +84,8 @@ public class MeteorParadigm {
 
             } else {
                 // Legacy config
-                String oreDict = componentName;
-                int weight = Integer.parseInt(componentArray[++i]);
+                String oreDict = blockName;
+                int weight = Integer.parseInt(blockArray[++i]);
 
                 List<ItemStack> list = OreDictionary.getOres(oreDict);
                 for (ItemStack stack : list) {
@@ -98,7 +98,7 @@ public class MeteorParadigm {
             }
 
             if (!success) {
-                AlchemicalWizardry.logger.warn("Unable to add Meteor Paradigm \"" + componentName + "\"");
+                AlchemicalWizardry.logger.warn("Unable to add Meteor Paradigm \"" + blockName + "\"");
             }
         }
     }
