@@ -33,11 +33,11 @@ public class MeteorParadigm {
         new MeteorParadigm(focusStack, radius, cost, 0);
     }
 
-    public MeteorParadigm(ItemStack focusStack, int radius, int cost, int fillerWeight) {
+    public MeteorParadigm(ItemStack focusStack, int radius, int cost, int fillerChance) {
         this.focusStack = focusStack;
         this.radius = radius;
         this.cost = cost;
-        this.fillerChance = fillerWeight;
+        this.fillerChance = fillerChance;
     }
 
     // modId:itemName:meta:weight
