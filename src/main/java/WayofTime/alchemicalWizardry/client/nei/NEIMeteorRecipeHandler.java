@@ -162,6 +162,9 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
             if (meteor.componentList.stream().anyMatch(m -> matchItem(result, m.getValidBlockParadigm()))) {
                 arecipes.add(new CachedMeteorRecipe(meteor, result));
             }
+            if (meteor.fillerList.stream().anyMatch(m -> matchItem(result, m.getValidBlockParadigm()))) {
+                arecipes.add(new CachedMeteorRecipe(meteor, result));
+            }
         }
     }
 
