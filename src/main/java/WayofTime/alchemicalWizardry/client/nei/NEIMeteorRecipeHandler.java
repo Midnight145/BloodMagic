@@ -73,13 +73,13 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                 }
             }
 
-            List<MeteorParadigmComponent> sortedFiller = new ArrayList<>(meteor.fillerList);
-
             if (fillerChance > 0) {
                 if (col != 0) {
                     col = 0;
                     row++;
                 }
+
+                List<MeteorParadigmComponent> sortedFiller = new ArrayList<>(meteor.fillerList);
 
                 if (!sortedFiller.isEmpty()) {
                     sortedFiller.sort(Comparator.comparingInt(c -> -c.getChance()));
