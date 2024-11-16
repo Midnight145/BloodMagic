@@ -15,12 +15,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Meteor {
 
-    public String[] ores;
-    public int radius;
-    public int cost;
-    public String focusModId;
-    public String focusName;
-    public int focusMeta;
+    private String[] ores;
+    private int radius;
+    private int cost;
+    private String focusModId;
+    private String focusName;
+    private int focusMeta;
     private String[] filler;
     private int fillerChance;
 
