@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.stream.MalformedJsonException;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -41,7 +43,7 @@ public class Meteor {
                             m.filler,
                             m.fillerChance);
                 }
-            } catch (FileNotFoundException e) {
+            } catch (FileNotFoundException | JsonSyntaxException e) {
                 e.printStackTrace();
             }
         }

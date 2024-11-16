@@ -136,7 +136,7 @@ public class MeteorParadigm {
 
         world.createExplosion(null, x, y, z, newRadius * 4, AlchemicalWizardry.doMeteorsDestroyBlocks);
 
-        List<MeteorParadigmComponent> fillerList = new ArrayList<>();
+        List<MeteorParadigmComponent> fillerList;
 
         if (hasCrystallos || hasIncendium || hasTennebrae) {
             fillerList = new ArrayList<>();
