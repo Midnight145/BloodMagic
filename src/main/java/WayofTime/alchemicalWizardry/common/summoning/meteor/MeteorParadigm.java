@@ -106,7 +106,7 @@ public class MeteorParadigm {
     public int getTotalComponentWeight() {
         int totalWeight = 0;
         for (MeteorParadigmComponent mpc : componentList) {
-            totalWeight += mpc.getChance();
+            totalWeight += mpc.getWeight();
         }
         return totalWeight;
     }
@@ -114,7 +114,7 @@ public class MeteorParadigm {
     public int getTotalFillerWeight() {
         int totalWeight = 0;
         for (MeteorParadigmComponent mpc : fillerList) {
-            totalWeight += mpc.getChance();
+            totalWeight += mpc.getWeight();
         }
         return totalWeight;
     }
@@ -144,11 +144,20 @@ public class MeteorParadigm {
 
         world.createExplosion(null, x, y, z, newRadius * 4, AlchemicalWizardry.doMeteorsDestroyBlocks);
 
-        float iceChance = hasCrystallos ? 1 : 0;
-        float soulChance = hasIncendium ? 1 : 0;
-        float obsidChance = hasTennebrae ? 1 : 0;
-
-        float totalChance = iceChance + soulChance + obsidChance;
+        if (hasCrystallos || hasIncendium || hasTennebrae) {
+            fillerList = new ArrayList<>();
+            if (hasCrystallos) {
+                fillerList.add(new MeteorParadigmComponent(new ItemStack(Blocks.ice), 180)); // 180 = 2^2 * 3^2 * 5
+            }
+            if (hasIncendium) {
+                fillerList.add(new MeteorParadigmComponent(new ItemStack(Blocks.netherrack), 60));
+                fillerList.add(new MeteorParadigmComponent(new ItemStack(Blocks.soul_sand), 60));
+                fillerList.add(new MeteorParadigmComponent(new ItemStack(Blocks.glowstone), 60));
+            }
+            if (hasTennebrae) {
+                fillerList.add(new MeteorParadigmComponent(new ItemStack(Blocks.obsidian), 180));
+            }
+        }
 
         int totalComponentWeight = getTotalComponentWeight();
         int totalFillerWeight = getTotalFillerWeight();
@@ -167,39 +176,7 @@ public class MeteorParadigm {
                     if (fillerChance <= 0 || world.rand.nextInt(100) >= fillerChance) {
                         setMeteorBlock(x + i, y + j, z + k, world, componentList, totalComponentWeight);
                     } else {
-                        float randChance = rand.nextFloat() * totalChance;
-
-                        if (randChance < iceChance) {
-                            world.setBlock(x + i, y + j, z + k, Blocks.ice, 0, 3);
-                        } else {
-                            randChance -= iceChance;
-
-                            if (randChance < soulChance) {
-                                switch (rand.nextInt(3)) {
-                                    case 0:
-                                        world.setBlock(x + i, y + j, z + k, Blocks.soul_sand, 0, 3);
-                                        break;
-                                    case 1:
-                                        world.setBlock(x + i, y + j, z + k, Blocks.glowstone, 0, 3);
-                                        break;
-                                    case 2:
-                                        world.setBlock(x + i, y + j, z + k, Blocks.netherrack, 0, 3);
-                                        break;
-                                }
-                            } else {
-                                randChance -= soulChance;
-
-                                if (randChance < obsidChance) {
-                                    world.setBlock(x + i, y + j, z + k, Blocks.obsidian, 0, 3);
-                                } else {
-                                    if (!this.fillerList.isEmpty()) {
-                                        setMeteorBlock(x + i, y + j, z + k, world, fillerList, totalFillerWeight);
-                                    } else {
-                                        world.setBlock(x + i, y + j, z + k, Blocks.stone, 0, 3);
-                                    }
-                                }
-                            }
-                        }
+                        setMeteorBlock(x + i, y + j, z + k, world, fillerList, totalFillerWeight);
                     }
                 }
             }
@@ -210,7 +187,7 @@ public class MeteorParadigm {
             int totalListWeight) {
         int randNum = world.rand.nextInt(totalListWeight);
         for (MeteorParadigmComponent mpc : blockList) {
-            randNum -= mpc.getChance();
+            randNum -= mpc.getWeight();
 
             if (randNum < 0) {
                 ItemStack blockStack = mpc.getValidBlockParadigm();

@@ -46,7 +46,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
             float totalFillerWeight = meteor.getTotalFillerWeight();
             int fillerChance = meteor.fillerChance;
             List<MeteorParadigmComponent> sortedComponents = new ArrayList<>(meteor.componentList);
-            sortedComponents.sort(Comparator.comparingInt(c -> -c.getChance()));
+            sortedComponents.sort(Comparator.comparingInt(c -> -c.getWeight()));
 
             float fillerRatio = (float) (fillerChance / 100.0);
             float componentRatio = 1 - fillerRatio;
@@ -57,7 +57,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                 int yPos = 37 + 18 * row;
 
                 List<String> tooltips = new ArrayList<>();
-                float chance = component.getChance() / totalComponentWeight * componentRatio;
+                float chance = component.getWeight() / totalComponentWeight * componentRatio;
                 tooltips.add(I18n.format("nei.recipe.meteor.chance", getFormattedChance(chance)));
                 tooltips.add(I18n.format("nei.recipe.meteor.amount", getEstimatedAmount(chance, meteor.radius)));
                 this.outputs.add(new TooltipStack(stack, xPos, yPos, tooltips));
@@ -82,7 +82,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                 List<MeteorParadigmComponent> sortedFiller = new ArrayList<>(meteor.fillerList);
 
                 if (!sortedFiller.isEmpty()) {
-                    sortedFiller.sort(Comparator.comparingInt(c -> -c.getChance()));
+                    sortedFiller.sort(Comparator.comparingInt(c -> -c.getWeight()));
                 } else {
                     sortedFiller.add(new MeteorParadigmComponent(new ItemStack(Blocks.stone), 1));
                     totalFillerWeight = 1;
@@ -94,7 +94,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                     int yPos = 37 + 18 * row;
 
                     List<String> tooltips = new ArrayList<>();
-                    float chance = filler.getChance() / totalFillerWeight * fillerRatio;
+                    float chance = filler.getWeight() / totalFillerWeight * fillerRatio;
                     tooltips.add(I18n.format("nei.recipe.meteor.chance", getFormattedChance(chance)));
                     tooltips.add(I18n.format("nei.recipe.meteor.amount", getEstimatedAmount(chance, meteor.radius)));
                     tooltips.add(I18n.format("nei.recipe.meteor.filler"));
