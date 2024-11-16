@@ -127,7 +127,6 @@ public class MeteorParadigm {
         }
 
         int newRadius = radius;
-
         int fillerChance = this.fillerChance;
         if (hasOrbisTerrae) {
             newRadius += 2;
