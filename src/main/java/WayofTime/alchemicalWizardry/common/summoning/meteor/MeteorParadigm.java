@@ -128,10 +128,13 @@ public class MeteorParadigm {
 
         int newRadius = radius;
 
+        int fillerChance = this.fillerChance;
         if (hasOrbisTerrae) {
             newRadius += 2;
+            fillerChance *= 1.12;
         } else if (hasTerrae) {
             newRadius += 1;
+            fillerChance *= 1.6;
         }
 
         world.createExplosion(null, x, y, z, newRadius * 4, AlchemicalWizardry.doMeteorsDestroyBlocks);
