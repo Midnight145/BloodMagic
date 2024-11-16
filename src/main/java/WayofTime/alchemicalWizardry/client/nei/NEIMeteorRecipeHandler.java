@@ -42,7 +42,6 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
             int col = 0;
 
             float totalComponentWeight = meteor.getTotalListWeight(meteor.componentList);
-            float totalFillerWeight = meteor.getTotalListWeight(meteor.fillerList);
             int fillerChance = meteor.fillerChance;
             List<MeteorParadigmComponent> sortedComponents = new ArrayList<>(meteor.componentList);
             sortedComponents.sort(Comparator.comparingInt(c -> -c.getWeight()));
@@ -79,6 +78,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                 }
 
                 List<MeteorParadigmComponent> sortedFiller = new ArrayList<>(meteor.fillerList);
+                float totalFillerWeight = meteor.getTotalListWeight(meteor.fillerList);
 
                 for (MeteorParadigmComponent filler : sortedFiller) {
                     ItemStack stack = filler.getValidBlockParadigm();
