@@ -42,8 +42,16 @@ public class FallingTower {
     }
 
     @ZenMethod
-    public static void addFocus(IItemStack stack, int radius, int cost, String components, String filler, int fillerChance) {
-        MineTweakerAPI.apply(new Add(toStack(stack), radius, cost, components.split("\\s*,\\s*"), filler.split("\\s*,\\s*"), fillerChance));
+    public static void addFocus(IItemStack stack, int radius, int cost, String components, String filler,
+            int fillerChance) {
+        MineTweakerAPI.apply(
+                new Add(
+                        toStack(stack),
+                        radius,
+                        cost,
+                        components.split("\\s*,\\s*"),
+                        filler.split("\\s*,\\s*"),
+                        fillerChance));
     }
 
     @ZenMethod

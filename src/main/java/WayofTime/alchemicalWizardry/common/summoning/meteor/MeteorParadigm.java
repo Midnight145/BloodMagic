@@ -25,12 +25,12 @@ public class MeteorParadigm {
     public ItemStack focusStack;
     public int radius;
     public int cost;
-    public int fillerChance; //Out of 100
+    public int fillerChance; // Out of 100
 
     public static Random rand = new Random();
 
     public MeteorParadigm(ItemStack focusStack, int radius, int cost) {
-        new MeteorParadigm(focusStack, radius, cost ,0);
+        new MeteorParadigm(focusStack, radius, cost, 0);
     }
 
     public MeteorParadigm(ItemStack focusStack, int radius, int cost, int fillerWeight) {
@@ -206,7 +206,8 @@ public class MeteorParadigm {
         }
     }
 
-    private void setMeteorBlock(int x, int y, int z, World world, List<MeteorParadigmComponent> blockList, int totalListWeight) {
+    private void setMeteorBlock(int x, int y, int z, World world, List<MeteorParadigmComponent> blockList,
+            int totalListWeight) {
         int randNum = world.rand.nextInt(totalListWeight);
         for (MeteorParadigmComponent mpc : blockList) {
             randNum -= mpc.getChance();
@@ -214,20 +215,9 @@ public class MeteorParadigm {
             if (randNum < 0) {
                 ItemStack blockStack = mpc.getValidBlockParadigm();
                 if (blockStack != null && blockStack.getItem() instanceof ItemBlock) {
-                    ((ItemBlock) blockStack.getItem()).placeBlockAt(
-                            blockStack,
-                            null,
-                            world,
-                            x,
-                            y,
-                            z,
-                            0,
-                            0,
-                            0,
-                            0,
-                            blockStack.getItemDamage());
-                    if (AlchemicalWizardry.isGregTechLoaded)
-                        setGTOresNaturalIfNeeded(world, x, y, z);
+                    ((ItemBlock) blockStack.getItem())
+                            .placeBlockAt(blockStack, null, world, x, y, z, 0, 0, 0, 0, blockStack.getItemDamage());
+                    if (AlchemicalWizardry.isGregTechLoaded) setGTOresNaturalIfNeeded(world, x, y, z);
                     world.markBlockForUpdate(x, y, z);
                     break;
                 }

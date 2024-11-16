@@ -19,7 +19,8 @@ public class MeteorRegistry {
         registerMeteorParadigm(stack, componentList, radius, cost, null, 0);
     }
 
-    public static void registerMeteorParadigm(ItemStack stack, String[] componentList, int radius, int cost, String[] fillerList, int fillerChance) {
+    public static void registerMeteorParadigm(ItemStack stack, String[] componentList, int radius, int cost,
+            String[] fillerList, int fillerChance) {
         if (stack != null && componentList != null) {
             MeteorParadigm meteor = new MeteorParadigm(stack, radius, cost, fillerChance);
             meteor.parseStringArray(componentList);
