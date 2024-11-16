@@ -48,13 +48,16 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
             List<MeteorParadigmComponent> sortedComponents = new ArrayList<>(meteor.componentList);
             sortedComponents.sort(Comparator.comparingInt(c -> -c.getChance()));
 
+            float fillerRatio = (float) (fillerChance / 100.0);
+            float componentRatio = 1 - fillerRatio;
+
             for (MeteorParadigmComponent component : sortedComponents) {
                 ItemStack stack = component.getValidBlockParadigm();
                 int xPos = 3 + 18 * col;
                 int yPos = 37 + 18 * row;
 
                 List<String> tooltips = new ArrayList<>();
-                float chance = component.getChance() / totalComponentWeight * (float) (1 - fillerChance / 100.0);
+                float chance = component.getChance() / totalComponentWeight * componentRatio;
                 tooltips.add(I18n.format("nei.recipe.meteor.chance", getFormattedChance(chance)));
                 tooltips.add(I18n.format("nei.recipe.meteor.amount", getEstimatedAmount(chance, meteor.radius)));
                 this.outputs.add(new TooltipStack(stack, xPos, yPos, tooltips));
@@ -91,7 +94,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                     int yPos = 37 + 18 * row;
 
                     List<String> tooltips = new ArrayList<>();
-                    float chance = filler.getChance() / totalFillerWeight * (float) (fillerChance / 100.0);
+                    float chance = filler.getChance() / totalFillerWeight * fillerRatio;
                     tooltips.add(I18n.format("nei.recipe.meteor.chance", getFormattedChance(chance)));
                     tooltips.add(I18n.format("nei.recipe.meteor.amount", getEstimatedAmount(chance, meteor.radius)));
                     tooltips.add(I18n.format("nei.recipe.meteor.filler"));
