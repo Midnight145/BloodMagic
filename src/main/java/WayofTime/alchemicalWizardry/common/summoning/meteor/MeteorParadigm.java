@@ -164,7 +164,7 @@ public class MeteorParadigm {
                         continue;
                     }
 
-                    if (world.rand.nextInt(100) >= fillerChance) {
+                    if (fillerChance <= 0 || world.rand.nextInt(100) >= fillerChance) {
                         setMeteorBlock(x + i, y + j, z + k, world, componentList, totalComponentWeight);
                     } else {
                         float randChance = rand.nextFloat() * totalChance;
