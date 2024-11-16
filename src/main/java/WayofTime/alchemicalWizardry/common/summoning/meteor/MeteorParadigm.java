@@ -1,7 +1,6 @@
 package WayofTime.alchemicalWizardry.common.summoning.meteor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -18,7 +17,6 @@ import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.common.blocks.TileEntityOres;
-import org.lwjgl.Sys;
 
 public class MeteorParadigm {
 
@@ -211,9 +209,6 @@ public class MeteorParadigm {
     private void setMeteorBlock(int x, int y, int z, World world, List<MeteorParadigmComponent> blockList, int totalListWeight) {
         int randNum = world.rand.nextInt(totalListWeight);
         for (MeteorParadigmComponent mpc : blockList) {
-            System.out.println("block: " + mpc.getValidBlockParadigm());
-            System.out.println("chance: " + mpc.getChance());
-            System.out.println("randNum: " + randNum);
             randNum -= mpc.getChance();
 
             if (randNum < 0) {
