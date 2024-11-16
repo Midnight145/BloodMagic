@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
@@ -44,11 +43,8 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
             int col = 0;
 
             float totalComponentWeight = meteor.getTotalComponentWeight();
-            System.out.println("totalComponentWeight: " +totalComponentWeight);
             float totalFillerWeight = meteor.getTotalFillerWeight();
-            System.out.println("totalFilerWeight: " + totalFillerWeight);
             int fillerChance = meteor.fillerChance;
-            System.out.println("fillerChance: " + fillerChance);
             List<MeteorParadigmComponent> sortedComponents = new ArrayList<>(meteor.componentList);
             sortedComponents.sort(Comparator.comparingInt(c -> -c.getChance()));
 
@@ -58,9 +54,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                 int yPos = 37 + 18 * row;
 
                 List<String> tooltips = new ArrayList<>();
-                float chance = component.getChance() / totalComponentWeight * (float)(1 - fillerChance /100.0);
-                System.out.println("block: " + stack.toString());
-                System.out.println("chance: " + chance);
+                float chance = component.getChance() / totalComponentWeight * (float)(1 - fillerChance / 100.0);
                 tooltips.add(I18n.format("nei.recipe.meteor.chance", getFormattedChance(chance)));
                 tooltips.add(I18n.format("nei.recipe.meteor.amount", getEstimatedAmount(chance, meteor.radius)));
                 this.outputs.add(new TooltipStack(stack, xPos, yPos, tooltips));
@@ -84,9 +78,9 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                     row++;
                 }
 
-                sortedFiller.sort(Comparator.comparingInt(c -> -c.getChance()));
-
-                if (sortedFiller.isEmpty()) {
+                if (!sortedFiller.isEmpty()) {
+                    sortedFiller.sort(Comparator.comparingInt(c -> -c.getChance()));
+                } else {
                     sortedFiller.add(new MeteorParadigmComponent(new ItemStack(Blocks.stone), 1));
                     totalFillerWeight = 1;
                 }
