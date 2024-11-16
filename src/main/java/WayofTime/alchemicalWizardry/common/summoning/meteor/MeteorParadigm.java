@@ -103,17 +103,9 @@ public class MeteorParadigm {
         }
     }
 
-    public int getTotalComponentWeight() {
+    public int getTotalListWeight(List<MeteorParadigmComponent> blockList) {
         int totalWeight = 0;
-        for (MeteorParadigmComponent mpc : componentList) {
-            totalWeight += mpc.getWeight();
-        }
-        return totalWeight;
-    }
-
-    public int getTotalFillerWeight() {
-        int totalWeight = 0;
-        for (MeteorParadigmComponent mpc : fillerList) {
+        for (MeteorParadigmComponent mpc : blockList) {
             totalWeight += mpc.getWeight();
         }
         return totalWeight;
@@ -144,6 +136,8 @@ public class MeteorParadigm {
 
         world.createExplosion(null, x, y, z, newRadius * 4, AlchemicalWizardry.doMeteorsDestroyBlocks);
 
+        List<MeteorParadigmComponent> fillerList = new ArrayList<>();
+
         if (hasCrystallos || hasIncendium || hasTennebrae) {
             fillerList = new ArrayList<>();
             if (hasCrystallos) {
@@ -157,10 +151,12 @@ public class MeteorParadigm {
             if (hasTennebrae) {
                 fillerList.add(new MeteorParadigmComponent(new ItemStack(Blocks.obsidian), 180));
             }
+        } else {
+            fillerList = this.fillerList;
         }
 
-        int totalComponentWeight = getTotalComponentWeight();
-        int totalFillerWeight = getTotalFillerWeight();
+        int totalComponentWeight = getTotalListWeight(componentList);
+        int totalFillerWeight = getTotalListWeight(fillerList);
 
         for (int i = -newRadius; i <= newRadius; i++) {
             for (int j = -newRadius; j <= newRadius; j++) {

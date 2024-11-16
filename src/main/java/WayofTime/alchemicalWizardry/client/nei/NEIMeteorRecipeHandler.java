@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -42,8 +41,8 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
             int row = 0;
             int col = 0;
 
-            float totalComponentWeight = meteor.getTotalComponentWeight();
-            float totalFillerWeight = meteor.getTotalFillerWeight();
+            float totalComponentWeight = meteor.getTotalListWeight(meteor.componentList);
+            float totalFillerWeight = meteor.getTotalListWeight(meteor.fillerList);
             int fillerChance = meteor.fillerChance;
             List<MeteorParadigmComponent> sortedComponents = new ArrayList<>(meteor.componentList);
             sortedComponents.sort(Comparator.comparingInt(c -> -c.getWeight()));
@@ -80,13 +79,6 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                 }
 
                 List<MeteorParadigmComponent> sortedFiller = new ArrayList<>(meteor.fillerList);
-
-                if (!sortedFiller.isEmpty()) {
-                    sortedFiller.sort(Comparator.comparingInt(c -> -c.getWeight()));
-                } else {
-                    sortedFiller.add(new MeteorParadigmComponent(new ItemStack(Blocks.stone), 1));
-                    totalFillerWeight = 1;
-                }
 
                 for (MeteorParadigmComponent filler : sortedFiller) {
                     ItemStack stack = filler.getValidBlockParadigm();
