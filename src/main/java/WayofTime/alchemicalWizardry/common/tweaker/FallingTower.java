@@ -55,13 +55,13 @@ public class FallingTower {
 
         private MeteorParadigm paradigm;
 
-        public Add(ItemStack stack, int radius, int cost, String[] ores) {
-            new Add(stack, radius, cost, ores, null, 0);
+        public Add(ItemStack stack, int radius, int cost, String[] components) {
+            new Add(stack, radius, cost, components, null, 0);
         }
 
-        public Add(ItemStack stack, int radius, int cost, String[] ores, String[] filler, int fillerChance) {
+        public Add(ItemStack stack, int radius, int cost, String[] components, String[] filler, int fillerChance) {
             paradigm = new MeteorParadigm(stack, radius, cost);
-            paradigm.parseStringArray(ores);
+            paradigm.parseStringArray(components);
             if (filler != null) {
                 paradigm.parseStringArray(filler, true);
             }

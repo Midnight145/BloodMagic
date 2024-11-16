@@ -20,7 +20,7 @@ import gregtech.common.blocks.TileEntityOres;
 
 public class MeteorParadigm {
 
-    public List<MeteorParadigmComponent> oreList = new ArrayList<>();
+    public List<MeteorParadigmComponent> componentList = new ArrayList<>();
     public List<MeteorParadigmComponent> fillerList = new ArrayList<>();
     public ItemStack focusStack;
     public int radius;
@@ -45,17 +45,17 @@ public class MeteorParadigm {
     // OREDICT:oreDictName:weight
     private static final Pattern oredictPattern = Pattern.compile("OREDICT:(.*):(\\d+)");
 
-    public void parseStringArray(String[] oreArray) {
-        parseStringArray(oreArray, false);
+    public void parseStringArray(String[] componentArray) {
+        parseStringArray(componentArray, false);
     }
 
-    public void parseStringArray(String[] oreArray, boolean filler) {
-        List<MeteorParadigmComponent> addList = filler ? fillerList : oreList;
-        for (int i = 0; i < oreArray.length; ++i) {
-            String oreName = oreArray[i];
+    public void parseStringArray(String[] componentArray, boolean filler) {
+        List<MeteorParadigmComponent> addList = filler ? fillerList : componentList;
+        for (int i = 0; i < componentArray.length; ++i) {
+            String componentName = componentArray[i];
             boolean success = false;
 
-            Matcher matcher = itemNamePattern.matcher(oreName);
+            Matcher matcher = itemNamePattern.matcher(componentName);
             if (matcher.matches()) {
                 String modID = matcher.group(1);
                 String itemName = matcher.group(2);
@@ -69,7 +69,7 @@ public class MeteorParadigm {
                     success = true;
                 }
 
-            } else if ((matcher = oredictPattern.matcher(oreName)).matches()) {
+            } else if ((matcher = oredictPattern.matcher(componentName)).matches()) {
                 String oreDict = matcher.group(1);
                 int weight = Integer.parseInt(matcher.group(2));
 
@@ -84,8 +84,8 @@ public class MeteorParadigm {
 
             } else {
                 // Legacy config
-                String oreDict = oreName;
-                int weight = Integer.parseInt(oreArray[++i]);
+                String oreDict = componentName;
+                int weight = Integer.parseInt(componentArray[++i]);
 
                 List<ItemStack> list = OreDictionary.getOres(oreDict);
                 for (ItemStack stack : list) {
@@ -98,14 +98,14 @@ public class MeteorParadigm {
             }
 
             if (!success) {
-                AlchemicalWizardry.logger.warn("Unable to add Meteor Paradigm \"" + oreName + "\"");
+                AlchemicalWizardry.logger.warn("Unable to add Meteor Paradigm \"" + componentName + "\"");
             }
         }
     }
 
-    public int getTotalOreWeight() {
+    public int getTotalComponentWeight() {
         int totalWeight = 0;
-        for (MeteorParadigmComponent mpc : oreList) {
+        for (MeteorParadigmComponent mpc : componentList) {
             totalWeight += mpc.getChance();
         }
         return totalWeight;
@@ -150,7 +150,7 @@ public class MeteorParadigm {
 
         float totalChance = iceChance + soulChance + obsidChance;
 
-        int totalOreWeight = getTotalOreWeight();
+        int totalComponentWeight = getTotalComponentWeight();
         int totalFillerWeight = getTotalFillerWeight();
 
         for (int i = -newRadius; i <= newRadius; i++) {
@@ -165,7 +165,7 @@ public class MeteorParadigm {
                     }
 
                     if (world.rand.nextInt(100) >= fillerChance) {
-                        setMeteorBlock(x + i, y + j, z + k, world, oreList, totalOreWeight);
+                        setMeteorBlock(x + i, y + j, z + k, world, componentList, totalComponentWeight);
                     } else {
                         float randChance = rand.nextFloat() * totalChance;
 
