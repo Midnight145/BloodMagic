@@ -301,78 +301,6 @@ public class UpgradedAltars {
         thirdTierAltar.add(
                 new AltarComponent(
                         -3,
-                        -1,
-                        -3,
-                        AlchemicalWizardry.specialAltarBlock[0].getBlock(),
-                        AlchemicalWizardry.specialAltarBlock[0].getMeta(),
-                        false,
-                        false));
-        thirdTierAltar.add(
-                new AltarComponent(
-                        -3,
-                        0,
-                        -3,
-                        AlchemicalWizardry.specialAltarBlock[0].getBlock(),
-                        AlchemicalWizardry.specialAltarBlock[0].getMeta(),
-                        false,
-                        false));
-        thirdTierAltar.add(
-                new AltarComponent(
-                        3,
-                        -1,
-                        -3,
-                        AlchemicalWizardry.specialAltarBlock[0].getBlock(),
-                        AlchemicalWizardry.specialAltarBlock[0].getMeta(),
-                        false,
-                        false));
-        thirdTierAltar.add(
-                new AltarComponent(
-                        3,
-                        0,
-                        -3,
-                        AlchemicalWizardry.specialAltarBlock[0].getBlock(),
-                        AlchemicalWizardry.specialAltarBlock[0].getMeta(),
-                        false,
-                        false));
-        thirdTierAltar.add(
-                new AltarComponent(
-                        -3,
-                        -1,
-                        3,
-                        AlchemicalWizardry.specialAltarBlock[0].getBlock(),
-                        AlchemicalWizardry.specialAltarBlock[0].getMeta(),
-                        false,
-                        false));
-        thirdTierAltar.add(
-                new AltarComponent(
-                        -3,
-                        0,
-                        3,
-                        AlchemicalWizardry.specialAltarBlock[0].getBlock(),
-                        AlchemicalWizardry.specialAltarBlock[0].getMeta(),
-                        false,
-                        false));
-        thirdTierAltar.add(
-                new AltarComponent(
-                        3,
-                        -1,
-                        3,
-                        AlchemicalWizardry.specialAltarBlock[0].getBlock(),
-                        AlchemicalWizardry.specialAltarBlock[0].getMeta(),
-                        false,
-                        false));
-        thirdTierAltar.add(
-                new AltarComponent(
-                        3,
-                        0,
-                        3,
-                        AlchemicalWizardry.specialAltarBlock[0].getBlock(),
-                        AlchemicalWizardry.specialAltarBlock[0].getMeta(),
-                        false,
-                        false));
-        thirdTierAltar.add(
-                new AltarComponent(
-                        -3,
                         1,
                         -3,
                         AlchemicalWizardry.specialAltarBlock[1].getBlock(),
@@ -485,44 +413,6 @@ public class UpgradedAltars {
                             AlchemicalWizardry.fourthTierRunes[0].getMeta(),
                             true,
                             true));
-        }
-        for (int i = -2; i <= 1; i++) {
-            fourthTierAltar.add(
-                    new AltarComponent(
-                            5,
-                            i,
-                            5,
-                            AlchemicalWizardry.specialAltarBlock[2].getBlock(),
-                            AlchemicalWizardry.specialAltarBlock[2].getMeta(),
-                            false,
-                            false));
-            fourthTierAltar.add(
-                    new AltarComponent(
-                            5,
-                            i,
-                            -5,
-                            AlchemicalWizardry.specialAltarBlock[2].getBlock(),
-                            AlchemicalWizardry.specialAltarBlock[2].getMeta(),
-                            false,
-                            false));
-            fourthTierAltar.add(
-                    new AltarComponent(
-                            -5,
-                            i,
-                            -5,
-                            AlchemicalWizardry.specialAltarBlock[2].getBlock(),
-                            AlchemicalWizardry.specialAltarBlock[2].getMeta(),
-                            false,
-                            false));
-            fourthTierAltar.add(
-                    new AltarComponent(
-                            -5,
-                            i,
-                            5,
-                            AlchemicalWizardry.specialAltarBlock[2].getBlock(),
-                            AlchemicalWizardry.specialAltarBlock[2].getMeta(),
-                            false,
-                            false));
         }
         fourthTierAltar.add(
                 new AltarComponent(
@@ -638,44 +528,6 @@ public class UpgradedAltars {
         }
 
         sixthTierAltar.addAll(fifthTierAltar);
-        for (int i = -4; i <= 2; i++) {
-            sixthTierAltar.add(
-                    new AltarComponent(
-                            11,
-                            i,
-                            11,
-                            AlchemicalWizardry.specialAltarBlock[5].getBlock(),
-                            AlchemicalWizardry.specialAltarBlock[5].getMeta(),
-                            false,
-                            false));
-            sixthTierAltar.add(
-                    new AltarComponent(
-                            -11,
-                            i,
-                            -11,
-                            AlchemicalWizardry.specialAltarBlock[5].getBlock(),
-                            AlchemicalWizardry.specialAltarBlock[5].getMeta(),
-                            false,
-                            false));
-            sixthTierAltar.add(
-                    new AltarComponent(
-                            11,
-                            i,
-                            -11,
-                            AlchemicalWizardry.specialAltarBlock[5].getBlock(),
-                            AlchemicalWizardry.specialAltarBlock[5].getMeta(),
-                            false,
-                            false));
-            sixthTierAltar.add(
-                    new AltarComponent(
-                            -11,
-                            i,
-                            11,
-                            AlchemicalWizardry.specialAltarBlock[5].getBlock(),
-                            AlchemicalWizardry.specialAltarBlock[5].getMeta(),
-                            false,
-                            false));
-        }
         sixthTierAltar.add(
                 new AltarComponent(
                         11,
