@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -42,11 +41,13 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
             int row = 0;
             int col = 0;
 
-            float totalComponentWeight = meteor.getTotalComponentWeight();
-            float totalFillerWeight = meteor.getTotalFillerWeight();
+            float totalComponentWeight = meteor.getTotalListWeight(meteor.componentList);
             int fillerChance = meteor.fillerChance;
             List<MeteorParadigmComponent> sortedComponents = new ArrayList<>(meteor.componentList);
-            sortedComponents.sort(Comparator.comparingInt(c -> -c.getChance()));
+            sortedComponents.sort(Comparator.comparingInt(c -> -c.getWeight()));
+
+            float fillerRatio = (float) (fillerChance / 100.0);
+            float componentRatio = 1 - fillerRatio;
 
             for (MeteorParadigmComponent component : sortedComponents) {
                 ItemStack stack = component.getValidBlockParadigm();
@@ -54,7 +55,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                 int yPos = 37 + 18 * row;
 
                 List<String> tooltips = new ArrayList<>();
-                float chance = component.getChance() / totalComponentWeight * (float)(1 - fillerChance / 100.0);
+                float chance = component.getWeight() / totalComponentWeight * componentRatio;
                 tooltips.add(I18n.format("nei.recipe.meteor.chance", getFormattedChance(chance)));
                 tooltips.add(I18n.format("nei.recipe.meteor.amount", getEstimatedAmount(chance, meteor.radius)));
                 this.outputs.add(new TooltipStack(stack, xPos, yPos, tooltips));
@@ -70,20 +71,14 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                 }
             }
 
-            List<MeteorParadigmComponent> sortedFiller = new ArrayList<>(meteor.fillerList);
-
             if (fillerChance > 0) {
                 if (col != 0) {
                     col = 0;
                     row++;
                 }
 
-                if (!sortedFiller.isEmpty()) {
-                    sortedFiller.sort(Comparator.comparingInt(c -> -c.getChance()));
-                } else {
-                    sortedFiller.add(new MeteorParadigmComponent(new ItemStack(Blocks.stone), 1));
-                    totalFillerWeight = 1;
-                }
+                List<MeteorParadigmComponent> sortedFiller = new ArrayList<>(meteor.fillerList);
+                float totalFillerWeight = meteor.getTotalListWeight(meteor.fillerList);
 
                 for (MeteorParadigmComponent filler : sortedFiller) {
                     ItemStack stack = filler.getValidBlockParadigm();
@@ -91,7 +86,7 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
                     int yPos = 37 + 18 * row;
 
                     List<String> tooltips = new ArrayList<>();
-                    float chance = filler.getChance() / totalFillerWeight * (float) (fillerChance / 100.0);
+                    float chance = filler.getWeight() / totalFillerWeight * fillerRatio;
                     tooltips.add(I18n.format("nei.recipe.meteor.chance", getFormattedChance(chance)));
                     tooltips.add(I18n.format("nei.recipe.meteor.amount", getEstimatedAmount(chance, meteor.radius)));
                     tooltips.add(I18n.format("nei.recipe.meteor.filler"));
@@ -157,6 +152,9 @@ public class NEIMeteorRecipeHandler extends TemplateRecipeHandler {
     public void loadCraftingRecipes(ItemStack result) {
         for (MeteorParadigm meteor : getSortedMeteors()) {
             if (meteor.componentList.stream().anyMatch(m -> matchItem(result, m.getValidBlockParadigm()))) {
+                arecipes.add(new CachedMeteorRecipe(meteor, result));
+            }
+            if (meteor.fillerList.stream().anyMatch(m -> matchItem(result, m.getValidBlockParadigm()))) {
                 arecipes.add(new CachedMeteorRecipe(meteor, result));
             }
         }

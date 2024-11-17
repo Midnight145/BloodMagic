@@ -10,17 +10,18 @@ import net.minecraft.item.ItemStack;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class Meteor {
 
-    public String[] ores;
-    public int radius;
-    public int cost;
-    public String focusModId;
-    public String focusName;
-    public int focusMeta;
+    private String[] ores;
+    private int radius;
+    private int cost;
+    private String focusModId;
+    private String focusName;
+    private int focusMeta;
     private String[] filler;
     private int fillerChance;
 
@@ -41,7 +42,7 @@ public class Meteor {
                             m.filler,
                             m.fillerChance);
                 }
-            } catch (FileNotFoundException e) {
+            } catch (FileNotFoundException | JsonSyntaxException e) {
                 e.printStackTrace();
             }
         }
